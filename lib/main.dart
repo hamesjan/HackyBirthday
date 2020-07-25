@@ -1,9 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hackybirthday/pages/home.dart';
+import 'package:hackybirthday/pages/login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() {
   runApp(MyApp());
+}
+
+
+Widget getAuthState(){
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<FirebaseUser> getUser() async{
+    return _auth.currentUser();
+  }
+
+  getUser().then((user) {
+    if (user != null) {
+      return Home();
+
+    }
+    return Login();
+  });
+  return Login();
 }
 
 class MyApp extends StatelessWidget {
@@ -17,7 +37,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'OpenSans',
         primarySwatch: Colors.blue,
       ),
-      home: Home(),
+      home: getAuthState(),
     );
   }
 }

@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:hackybirthday/pages/swipe.dart';
 import 'package:hackybirthday/pages/team.dart';
 import 'package:hackybirthday/pages/preferences.dart';
+import 'package:hackybirthday/pages/login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -11,6 +13,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
   TabController _tabController;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
 
   @override
   void dispose() {
@@ -21,7 +25,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 3);
+    _tabController = TabController(vsync: this, length: 2);
   }
 
 
@@ -38,6 +42,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
           IconButton(
             icon: Icon(Icons.settings, color: Colors.black,),
             onPressed: (){
+            _auth.signOut();
+            Navigator.pop(context);
+            Navigator.push(context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => Login()
+              )
+            );
             },
           )
         ],
@@ -46,7 +57,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
         child: TabBarView(
           controller: _tabController,
           children: <Widget>[
-            Preferences(),
             Swipe(),
             Team(),
           ],
@@ -58,15 +68,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
           labelColor: Colors.black12,
           unselectedLabelColor: Colors.black38,
           tabs: <Widget>[
-            Tab(
-              icon: Icon(Icons.map, color: Colors.black,),
-              child: Text(
-                'Progress',
-                style: TextStyle(
-                    color: Colors.black
-                ),
-              ),
-            ),
             Tab(
               icon: Icon(Icons.poll, color:  Colors.black,),
               child: Text(
