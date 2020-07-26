@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hackybirthday/pages/home.dart';
 import 'package:hackybirthday/pages/login.dart';
+import 'package:hackybirthday/pages/step2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 void main() {
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: getAuthState(),
+//      home: StepTwo()
     );
   }
 }

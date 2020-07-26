@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hackybirthday/pages/home.dart';
+import 'package:hackybirthday/pages/step2.dart';
 import 'package:hackybirthday/widgets/custom_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -55,7 +56,7 @@ class _RegistrationState extends State<Registration> {
     Navigator.pop(context);
     Navigator.push(context,
         MaterialPageRoute(
-            builder: (BuildContext context) => Home()
+            builder: (BuildContext context) => StepTwo(mongoID: mongoID.id,)
         )
     );
   }
