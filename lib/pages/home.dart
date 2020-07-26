@@ -8,8 +8,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class Home extends StatefulWidget {
   final List<String> swipes;
+  final String mongoID;
 
-  const Home({Key key, this.swipes}) : super(key: key);
+  const Home({Key key, this.swipes, this.mongoID}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -35,6 +36,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
 
   @override
   Widget build(BuildContext context) {
+    print(widget.mongoID);
+    print(widget.swipes);
     return Scaffold(
       appBar: AppBar(
         title: Text('Welcome', style: TextStyle(
@@ -61,8 +64,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
         child: TabBarView(
           controller: _tabController,
           children: <Widget>[
-            Swipe(swipes: widget.swipes,),
-            Team(),
+            Swipe(swipes: widget.swipes, mongoID: widget.mongoID,),
+            Team(mongoID: widget.mongoID,),
           ],
         ),
       ),
@@ -73,17 +76,17 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
           unselectedLabelColor: Colors.black38,
           tabs: <Widget>[
             Tab(
-              icon: Icon(Icons.poll, color:  Colors.black,),
+              icon: Icon(Icons.menu, color:  Colors.black,),
               child: Text(
-                'Package Info', style: TextStyle(
+                'Meet', style: TextStyle(
                   color: Colors.black
               ),
               ),
             ),
             Tab(
-              icon: Icon(Icons.phone, color: Colors.black,),
+              icon: Icon(Icons.people, color: Colors.black,),
               child: Text(
-                'Contact',
+                'Team',
                 style: TextStyle(
                     color: Colors.black
                 ),

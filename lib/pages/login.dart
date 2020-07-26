@@ -49,7 +49,7 @@ class _LoginState extends State<Login> {
     Navigator.pop(context);
     Navigator.push(context,
         MaterialPageRoute(
-            builder: (BuildContext context) => Home(swipes: peopleListFromJson(response2.body).ids)
+            builder: (BuildContext context) => Home(swipes: peopleListFromJson(response2.body).ids, mongoID: temp1,)
         )
     );
   }
@@ -69,6 +69,9 @@ class _LoginState extends State<Login> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Image(image: AssetImage(
+              'assets/images/hackermatch.png'
+            ),),
             SizedBox(
               height: 15,
             ),

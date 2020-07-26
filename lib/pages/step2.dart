@@ -474,7 +474,7 @@ class _StepTwoState extends State<StepTwo> {
                       Navigator.pop(context);
                       Navigator.push(context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => Home(swipes: peopleListFromJson(response2.body).ids,)
+                        builder: (BuildContext context) => Home(swipes: peopleListFromJson(response2.body).ids, mongoID: widget.mongoID,)
                       ));
                     },
                   ),

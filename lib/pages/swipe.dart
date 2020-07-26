@@ -9,8 +9,9 @@ import 'package:hackybirthday/widgets/profile_card.dart';
 
 class Swipe extends StatefulWidget {
   final List<String> swipes;
+  final String mongoID;
 
-  const Swipe({Key key, this.swipes}) : super(key: key);
+  const Swipe({Key key, this.swipes,this.mongoID}) : super(key: key);
   @override
   _SwipeState createState() => _SwipeState();
 }
@@ -32,9 +33,67 @@ class _SwipeState extends State<Swipe> {
                );
                 profileList.add(profileFromJson(response.body));
     });
+    print(profileList);
     return profileList;
   }
 
+  Widget match() {
+    return Container(
+      color: Colors.green,
+      child: Align(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              width: 20,
+            ),
+            Icon(
+              Icons.favorite,
+              color: Colors.white,
+            ),
+            Text(
+              "Match!",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.left,
+            ),
+          ],
+        ),
+        alignment: Alignment.centerLeft,
+      ),
+    );
+  }
+
+  Widget dismiss() {
+    return Container(
+      color: Colors.red,
+      child: Align(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            Icon(
+              Icons.delete,
+              color: Colors.white,
+            ),
+            Text(
+              "Pass",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.right,
+            ),
+            SizedBox(
+              width: 20,
+            ),
+          ],
+        ),
+        alignment: Alignment.centerRight,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,24 +133,27 @@ class _SwipeState extends State<Swipe> {
                 itemCount: profileList.length,
                 itemBuilder: (context, index) {
                     return Dismissible(
-                      onDismissed: (DismissDirection direction) {
+                      onDismissed: (DismissDirection direction) async{
                         setState(() {
                           profileList.removeAt(index);
                         });
+                        if (direction == DismissDirection.endToStart){
+                          Map data = {
+                            "id": widget.mongoID,
+                            "otherid": widget.swipes[index]
+                          };
+                          var response = await http.post('https://us-central1-aiot-fit-xlab.cloudfunctions.net/matchhacker',
+                              headers: {"Content-Type": "application/json"},
+                              body: json.encode(data)
+                          );
+                        } else {
+                          print('Pass');
+                        }
                       },
-                      secondaryBackground: Container(
-                        child: Center(
-                          child: Text(
-                            'Delete',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                        color: Colors.red,
-                      ),
-                      background: Container(),
+                      secondaryBackground: match(),
+                      background: dismiss(),
                       child: ProfileCard(profile: profileList[index]),
                       key: UniqueKey(),
-                      direction: DismissDirection.endToStart,
                     );
                 },
               );
