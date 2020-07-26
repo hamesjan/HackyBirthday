@@ -1,9 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hackybirthday/pages/home.dart';
 import 'package:hackybirthday/pages/registration.dart';
 import 'package:hackybirthday/widgets/custom_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hackybirthday/classes/people_swipe.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 
 class Login extends StatefulWidget {
@@ -15,6 +19,8 @@ class _LoginState extends State<Login> {
   String email;
   String password;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final Firestore _firestore = Firestore.instance;
+  String temp1;
 
   Future<FirebaseUser> getUser() async{
     return _auth.currentUser();
@@ -23,10 +29,27 @@ class _LoginState extends State<Login> {
   signInUser() async{
     AuthResult user = await _auth.signInWithEmailAndPassword(email: email, password: password);
     FirebaseUser temp = await getUser();
+
+    await _firestore.collection("users").getDocuments().then((querySnapshot) {
+      querySnapshot.documents.forEach((result) {
+        if (result['uid'] == temp.uid.toString()) {
+          temp1 = result['mongoID'];
+        }
+      });
+    });
+
+    Map data2 = {
+      "id" : temp1,
+    };
+    var response2 = await http.post('https://us-central1-aiot-fit-xlab.cloudfunctions.net/gethackers',
+        headers: {"Content-Type": "application/json"},
+        body: json.encode(data2)
+    );
+
     Navigator.pop(context);
     Navigator.push(context,
         MaterialPageRoute(
-            builder: (BuildContext context) => Home()
+            builder: (BuildContext context) => Home(swipes: peopleListFromJson(response2.body).ids)
         )
     );
   }

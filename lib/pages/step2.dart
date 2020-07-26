@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:hackybirthday/classes/people_swipe.dart';
 import 'package:hackybirthday/pages/home.dart';
 import 'package:hackybirthday/widgets/custom_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -445,29 +446,36 @@ class _StepTwoState extends State<StepTwo> {
                       Map data = {
                         "id" : widget.mongoID,
                         "haveidea" : haveidea.toString().toLowerCase(),
-                      "idea" : idea.toString().toLowerCase(),
-                      "focusarea" : focusarea.toString().toLowerCase(),
-                      "focuscommit" : focuscommit.toString().toLowerCase(),
-                      "teamsize" : teamsize.toString().toLowerCase(),
-                      "gendermix" : gendermix.toString().toLowerCase(),
-                      "teamskill" : teamskill.toString().toLowerCase(),
-                      "newskill" : newskill.toString().toLowerCase(),
-                      "win" : win.toString().toLowerCase(),
-                      "learn" : learn.toString().toLowerCase(),
-                      "build" : buildComplete.toString().toLowerCase(),
-                      "friend" : friend.toString().toLowerCase()
+                        "idea" : idea.toString().toLowerCase(),
+                        "focusarea" : focusarea.toString().toLowerCase(),
+                        "focuscommit" : focuscommit.toString().toLowerCase(),
+                        "teamsize" : teamsize.toString().toLowerCase(),
+                        "gendermix" : gendermix.toString().toLowerCase(),
+                        "teamskill" : teamskill.toString().toLowerCase(),
+                        "newskill" : newskill.toString().toLowerCase(),
+                        "win" : win.toString().toLowerCase(),
+                        "learn" : learn.toString().toLowerCase(),
+                        "build" : buildComplete.toString().toLowerCase(),
+                        "friend" : friend.toString().toLowerCase()
                       };
-                      print(data);
                       var response = await http.post('https://us-central1-aiot-fit-xlab.cloudfunctions.net/addahackermatcher',
                           headers: {"Content-Type": "application/json"},
                           body: json.encode(data)
                       );
+                      Map data2 = {
+                        "id" : widget.mongoID,
+                      };
+                      var response2 = await http.post('https://us-central1-aiot-fit-xlab.cloudfunctions.net/gethackers',
+                          headers: {"Content-Type": "application/json"},
+                          body: json.encode(data2)
+                      );
+                      print(response2.body);
                       print(response.body);
-//                      Navigator.pop(context);
-//                      Navigator.push(context,
-//                      MaterialPageRoute(
-//                        builder: (BuildContext context) => Home()
-//                      ));
+                      Navigator.pop(context);
+                      Navigator.push(context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => Home(swipes: peopleListFromJson(response2.body).ids,)
+                      ));
                     },
                   ),
                   SizedBox(

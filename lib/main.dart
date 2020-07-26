@@ -9,7 +9,6 @@ void main() {
   runApp(MyApp());
 }
 
-
 Widget getAuthState(){
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -27,6 +26,7 @@ Widget getAuthState(){
   return Login();
 }
 
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'OpenSans',
         primarySwatch: Colors.blue,
       ),
-      home: getAuthState(),
+      home: Login(),
 //      home: StepTwo()
     );
   }

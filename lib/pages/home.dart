@@ -7,6 +7,10 @@ import 'package:hackybirthday/pages/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Home extends StatefulWidget {
+  final List<String> swipes;
+
+  const Home({Key key, this.swipes}) : super(key: key);
+
   @override
   _HomeState createState() => _HomeState();
 }
@@ -57,7 +61,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
         child: TabBarView(
           controller: _tabController,
           children: <Widget>[
-            Swipe(),
+            Swipe(swipes: widget.swipes,),
             Team(),
           ],
         ),
